@@ -321,7 +321,38 @@
   ],
   "fixes": {
     "titles": [],
-    "redirect_map": []
+    "redirect_map": [
+      {
+        "from": "https://nmgtechnologies.com/hs-fs/hubfs/B-W_icon.png.png?width=101&height=100&name=B-W_icon.png.png",
+        "to": "https://nmgtechnologies.com/hs-fs/hubfs/london-logo.png?width=168&height=50&name=london-logo.png",
+        "reason": "404 -> closest live page by path similarity"
+      },
+      {
+        "from": "https://nmgtechnologies.com/hs-fs/hubfs/edtech.png.png?width=101&height=100&name=edtech.png.png",
+        "to": "https://nmgtechnologies.com/hs-fs/hubfs/london-logo.png?width=168&height=50&name=london-logo.png",
+        "reason": "404 -> closest live page by path similarity"
+      },
+      {
+        "from": "https://nmgtechnologies.com/hs-fs/hubfs/fintech.png.png?width=101&height=100&name=fintech.png.png",
+        "to": "https://nmgtechnologies.com/hs-fs/hubfs/london-logo.png?width=168&height=50&name=london-logo.png",
+        "reason": "404 -> closest live page by path similarity"
+      },
+      {
+        "from": "https://nmgtechnologies.com/hs-fs/hubfs/fintechgrey.png?width=122&height=80&name=fintechgrey.png",
+        "to": "https://nmgtechnologies.com/hs-fs/hubfs/london-logo.png?width=168&height=50&name=london-logo.png",
+        "reason": "404 -> closest live page by path similarity"
+      },
+      {
+        "from": "https://nmgtechnologies.com/hs-fs/hubfs/glob.png.png?width=101&height=100&name=glob.png.png",
+        "to": "https://nmgtechnologies.com/hs-fs/hubfs/london-logo.png?width=168&height=50&name=london-logo.png",
+        "reason": "404 -> closest live page by path similarity"
+      },
+      {
+        "from": "https://nmgtechnologies.com/hs-fs/hubfs/healthgrey.png?width=105&height=90&name=healthgrey.png",
+        "to": "https://nmgtechnologies.com/hs-fs/hubfs/london-logo.png?width=168&height=50&name=london-logo.png",
+        "reason": "404 -> closest live page by path similarity"
+      }
+    ]
   },
   "recommendations": [
     "Fix the 12 High-severity 'duplicate_title' issue(s) first.",
@@ -332,7 +363,7 @@
   ],
   "run_meta": {
     "model": "qwen3.5:9b",
-    "model_calls": 0,
-    "duration_sec": 0.0
+    "model_calls": 40,
+    "duration_sec": 248.3
   }
 }
