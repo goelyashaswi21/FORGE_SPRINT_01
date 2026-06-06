@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SEO Command Center — Live Cockpit</title>
 <style>
-:root{--ink:#1a1a1f;--card:#242428;--line:#3a3a42;--paper:#f8f7f4;--mute:#c8c5be;--red:#FF0000}
+:root{--ink:#1a1a1f;--card:#242428;--line:#3a3a42;--paper:#f8f7f4;--mute:#c8c5be;--red:#e03e3e;--amber:#e2b53e;--slate:#4a4a55}
 *{box-sizing:border-box}body{margin:0;background:var(--ink);color:var(--paper);font-family:Inter,system-ui,sans-serif}
 header{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 h1{font-size:17px;margin:0}h1 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--red);margin-right:8px;animation:p 1.6s infinite}
@@ -13,25 +13,63 @@ h1{font-size:17px;margin:0}h1 .dot{display:inline-block;width:9px;height:9px;bor
 .card h2{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--mute);margin:0 0 12px}
 .k{display:flex;gap:22px;flex-wrap:wrap}.k div{font-size:12px;color:var(--mute)}.k b{display:block;font-size:26px;color:var(--paper)}
 table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
-th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
-.sev{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px}.sev.high{background:var(--red);color:#fff}
-.sev.medium{background:#e2b53e;color:#1a1a1f}.sev.low{background:var(--line);color:var(--mute)}
-#log{max-height:280px;overflow:auto;font-size:12.5px}#log div{margin:5px 0;color:var(--mute)}
+th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);cursor:pointer;user-select:none}
+th:hover{color:var(--paper)}
+.sev{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px}
+.sev.high{background:var(--red);color:#fff}
+.sev.medium{background:var(--amber);color:#1a1a1f}
+.sev.low{background:var(--slate);color:var(--mute)}
+#log{max-height:220px;overflow:auto;font-size:12.5px}#log div{margin:5px 0;color:var(--mute)}
 .empty{color:var(--mute);font-size:13px}
+#progress-wrap{background:var(--line);border-radius:2px;margin-bottom:12px;overflow:hidden;display:none;height:3px}
+#progress-bar{height:3px;background:var(--red);width:0%;transition:width .4s ease;border-radius:2px}
+#done-banner{display:none;background:#1a3a1a;border:1px solid #2d6b2d;border-radius:10px;padding:10px 16px;margin-bottom:12px;color:#6fcf6f;font-size:13px;font-weight:600}
+#recs-card{margin-top:16px;display:none}
+#recs-list{list-style:none;padding:0;margin:0}
+#recs-list li{font-size:12.5px;color:var(--mute);padding:5px 0;border-bottom:1px solid var(--line)}
+#recs-list li:last-child{border-bottom:none}
+#recs-list li::before{content:"→ ";color:var(--red)}
+.fixes-counts{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mute)}
+.fixes-counts b{color:var(--paper)}
 </style></head><body>
-<header><h1><span class="dot"></span>SEO Command Center <span class="pill" id="meta">idle</span></h1>
-<div class="pill" id="urls">0 URLs</div></header>
+<header>
+  <h1><span class="dot"></span>SEO Command Center <span class="pill" id="meta">idle</span></h1>
+  <div class="pill" id="urls">0 URLs</div>
+</header>
 <div class="grid">
- <div>
-  <div class="card k" id="counts"><div><b id="c-total">0</b>issues</div><div><b id="c-high" style="color:var(--red)">0</b>high</div>
-   <div><b id="c-med" style="color:#e2b53e">0</b>medium</div><div><b id="c-low">0</b>low</div></div>
-  <div class="card" style="margin-top:16px"><h2>Issues found (live)</h2>
-   <div style="overflow-x:auto"><table id="tbl"><thead><tr><th>Severity</th><th>Issue</th><th>URLs</th></tr></thead>
-   <tbody id="tbody"><tr><td colspan="3" class="empty">Waiting for the audit to run…</td></tr></tbody></table></div></div>
- </div>
- <div>
-  <div class="card"><h2>Run log</h2><div id="log"><div class="empty">Pipeline steps stream here.</div></div></div>
-  <div class="card" style="margin-top:16px"><h2>Deliverable</h2><div id="export" class="empty">report.html will be ready when the run finishes.</div></div>
- </div>
+  <div>
+    <div id="done-banner">✓ Audit complete — report.html is ready</div>
+    <div id="progress-wrap"><div id="progress-bar"></div></div>
+    <div class="card k" id="counts">
+      <div><b id="c-total">0</b>issues</div>
+      <div><b id="c-high" style="color:var(--red)">0</b>high</div>
+      <div><b id="c-med" style="color:var(--amber)">0</b>medium</div>
+      <div><b id="c-low">0</b>low</div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2>Issues found (live)</h2>
+      <div style="overflow-x:auto"><table id="tbl">
+        <thead><tr>
+          <th onclick="sortTable(0)">Severity ↕</th>
+          <th onclick="sortTable(1)">Issue ↕</th>
+          <th onclick="sortTable(2)">URLs ↕</th>
+        </tr></thead>
+        <tbody id="tbody"><tr><td colspan="3" class="empty">Waiting for audit…</td></tr></tbody>
+      </table></div>
+    </div>
+    <div class="card" id="recs-card">
+      <h2>Recommendations</h2>
+      <ul id="recs-list"></ul>
+    </div>
+  </div>
+  <div>
+    <div class="card"><h2>Run log</h2><div id="log"><div class="empty">Pipeline steps stream here.</div></div></div>
+    <div class="card" style="margin-top:16px">
+      <h2>Fixes</h2>
+      <div id="fixes-body" class="empty">Fix data will appear after the run.</div>
+    </div>
+    <div class="card" style="margin-top:16px"><h2>Deliverable</h2><div id="export" class="empty">report.html will be ready when the run finishes.</div></div>
+  </div>
 </div>
-<script src="/app.js"></script></body></html>
+<script src="/app.js"></script>
+</body></html>
