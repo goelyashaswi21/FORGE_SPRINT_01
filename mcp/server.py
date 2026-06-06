@@ -218,4 +218,8 @@ def _run_mcp():
 if __name__ == "__main__":
     start_dashboard()
     print(f"[seo] dashboard live at http://localhost:{PORT}", flush=True)
-    _run_mcp()
+    import time
+    while True:
+        time.sleep(1)
+
+
